@@ -7,15 +7,15 @@ class AdminPostsController < ApplicationController
 
   def filter_by_station
     station = Station.find_by(name: params[:station_name])
-    posts = AdminPost.where(station_id: station.id)
-    posts = posts.search(params)
+    posts = params[:year] ? AdminPost.search(params) : AdminPost.all
+    posts = posts.where(station_id: station.id)
     render json: {status: 'SUCCESS', data: posts}
   end
 
   def filter_by_data
     station = Station.find_by(name: params[:station_name])
-    posts = AdminPost.where(station_id: station.id).where(data: params[:data])
-    posts = posts.search(params)
+    posts = params[:year] ? AdminPost.search(params) : AdminPost.all
+    posts = posts.where(station_id: station.id).where(data: params[:data])
     render json: {status: 'SUCCESS', data: posts}
   end
 

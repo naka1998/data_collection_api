@@ -7,20 +7,18 @@ class AdminPost < ApplicationRecord
 
   belongs_to :station
   def self.search(params)
-    year = params[:year].present? ? params[:year].to_i : 0
+    year = params[:year].to_i
     month = params[:month].present? ? params[:month].to_i : 0
     day = params[:day].present? ? params[:day].to_i : 0
     result = AdminPost.all
-    result = if year != 0
-              if month != 0
-                if day != 0
-                  result.where(created_at: Date.new(year,month,day).in_time_zone.all_day)
-                else
-                  result.where(created_at: Date.new(year,month,1).in_time_zone.all_month)
-                end
+    result =if month != 0
+              if day != 0
+                result.where(created_at: Date.new(year,month,day).in_time_zone.all_day)
               else
-                result.where(created_at: Date.new(year, 1, 1).in_time_zone.all_year)
+                result.where(created_at: Date.new(year,month,1).in_time_zone.all_month)
               end
+            else
+              result.where(created_at: Date.new(year, 1, 1).in_time_zone.all_year)
             end
     result
   end
